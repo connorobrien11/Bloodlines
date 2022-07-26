@@ -1,0 +1,401 @@
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/vozoid/ui-libraries/main/drawing/void/source.lua"))()
+
+local main = library:Load{
+    Name = game:GetService("InsertService").InsertionHash.Value,
+    SizeX = 500,
+    SizeY = 600,
+    Theme = "Midnight",
+    Extension = "lua", -- config file extension
+    Folder = "Bloodlines Settings" -- config folder name
+}
+
+local tab = main:Tab("Bloodlines")
+local sections = {
+    section = tab:Section{Name = "Local Cheats", Side = "Left"},
+    section2 = tab:Section{Name = "Visuals", Side = "Right"},
+    section3 = tab:Section{Name = "Teleports", Side = "Left"}
+}
+
+function localcheats() 
+    local toggle = sections.section:Toggle{
+        Name = "Fly",
+        Flag = "Toggle 1",
+        Default = false,
+        Callback  = function(bool)
+            getgenv().fly = bool 
+            if bool then 
+                while wait() do
+                 if not getgenv().fly then break end
+                    local plr = game.Players.LocalPlayer.Character
+                    plr.HumanoidRootPart.Velocity = game.Workspace.CurrentCamera.CFrame.lookVector * flyspeed
+                end
+            end
+        end
+    }
+    toggle:Slider{
+        Text = "[value]/150",
+        Default = 0,
+        Min = 0,
+        Max = 150,
+        Float = 0.5,
+        Flag = "Slider 1",
+        Callback = function(value)
+            local flyspeed = value
+        end
+    }
+    toggle:Keybind{
+        Blacklist = {Enum.UserInputType.MouseButton1},
+        Flag = "Toggle 2 Keybind 1",
+        Mode = "Toggle", -- mode to nil if u dont want it to toggle the toggle
+        Callback = function(key, fromsetting)
+            if fromsetting then
+    
+            else
+                
+            end
+        end
+    }
+    
+    sections.section:Toggle{
+        Name = "No Fall Damage",
+        Flag = "Toggle 3",
+        Default = false,
+        Callback  = function(bool)
+            getgenv().nofall = bool 
+            if bool then 
+                oldnc = hookmetamethod(game, "__namecall", function(self,...)
+                    local args = {...}
+                    local method = getnamecallmethod()
+                    
+                    if method == "FireServer" and self.Name == "DataEvent" and args[1] == "TakeDamage" and getgenv().nofall == true then
+                        return
+                    end
+                    return oldnc(self,...)
+                end)
+            end
+        end
+    }
+    sections.section:Toggle{
+        Name = "No Fire",
+        Flag = "Toggle 4",
+        Default = false,
+        Callback  = function(bool)
+            getgenv().nofiredamage = bool 
+            if bool then 
+                oldnc2 = hookmetamethod(game, "__namecall", function(self,...)
+                    local args = {...}
+                    local method = getnamecallmethod()
+                    
+                    if method == "FireServer" and self.Name == "DataEvent" and args[1] == "InflictFire" and getgenv().nofiredamage == true then
+                        return
+                    end
+                    return oldnc2(self,...)
+                end)
+            end
+        end
+    }
+    sections.section:Toggle{
+        Name = "Infinite Chakra",
+        Flag = "Toggle 1",
+        Default = false,
+        Callback  = function(bool)
+            getgenv().chakra = bool 
+            if bool then 
+                while wait() do
+                    game:GetService("Players").LocalPlayer.Backpack.chakra.Value = 100
+                end
+            end
+            if getgenv().chakra == false then 
+                game:GetService("Players").LocalPlayer.Backpack.chakra.Value = 100
+            end
+        end
+    }
+    sections.section:Toggle{
+        Name = "Anti Grip",
+        Flag = "Toggle 1",
+        Default = false,
+        Callback  = function(bool)
+            getgenv().antigrip = bool 
+            if bool then 
+                while wait() do
+                    if not getgenv().antigrip then break end
+                    local plr = game.Players.LocalPlayer.Character
+                    if plr:FindFirstChild("Humanoid") then
+                        if plr.Humanoid.Health < 20 then
+                            plr.HumanoidRootPart.CFrame = CFrame.new(381, 5, 576)
+                        end
+                    end
+                end
+            end
+        end
+    }
+    sections.section:Button{
+        Name = "Reset",
+        Callback  = function()
+            game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").Health = 0
+        end
+    }
+    sections.section:Keybind{
+        Blacklist = {Enum.UserInputType.MouseButton1},
+        Name = "Instant Log",
+        Flag = "Toggle 2 Keybind 1",
+        Mode = "nil",
+        Callback = function(key, fromsetting)
+            if fromsetting then
+                warn('key changed')
+            else
+                if game:GetService("Players").naptorian.PlayerGui.ClientGui.Mainframe:FindFirstChild("Danger").Visible == true then
+                    warn('player cannot log')
+                else 
+                    game.Players.LocalPlayer:Kick("Instant Logged")
+                end
+            end
+        end
+    }
+
+end
+localcheats()
+
+function visuals()
+    getgenv().esp_loaded = false
+    getgenv().Visibility = false 
+    getgenv().nameESP = false
+    getgenv().distance = false
+    getgenv().outline = false
+    getgenv().boxESP = false
+
+
+    sections.section2:Toggle{
+        Name = "Esp Enabled",
+        Flag = "Toggle 1",
+        Default = false,
+        Callback = function(Value)
+            if getgenv().esp_loaded == false and Value == true then
+                getgenv().esp_loaded = true
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/connorobrien11/libary/main/fn5596723233475473587hWDw8q434923482989y39fd", true))()
+            end
+        getgenv().Visibility = Value
+        end
+    }
+    local toggle5 = sections.section2:Toggle{
+        Name = "Show Players",
+        Flag = "Toggle 1",
+        Default = false,
+        Callback = function(Value)
+            if getgenv().esp_loaded == false and Value == true then
+                getgenv().esp_loaded = true
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/connorobrien11/libary/main/fn5596723233475473587hWDw8q434923482989y39fd", true))()
+            end
+            getgenv().nameESP = Value
+        end
+    }
+    sections.section2:Toggle{
+        Name = "Text Outline",
+        Flag = "Toggle 1",
+        Default = false,
+        Callback = function(Value)
+        if getgenv().esp_loaded == false and Value == true then
+            getgenv().esp_loaded = true
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/connorobrien11/libary/main/fn5596723233475473587hWDw8q434923482989y39fd", true))()
+        end
+        getgenv().outline = Value
+    end
+    }
+    sections.section2:Toggle{
+        Name = "Player Distance",
+        Flag = "Toggle 1",
+        Default = false,
+        Callback = function(Value)
+            if getgenv().esp_loaded == false and Value == true then
+                getgenv().esp_loaded = true
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/connorobrien11/libary/main/fn5596723233475473587hWDw8q434923482989y39fd", true))()
+            end
+            getgenv().distance = Value
+        end
+    }
+    sections.section2:Toggle{
+        Name = "Player Boxes",
+        Flag = "Toggle 1",
+        Default = false,
+        Callback = function(Value)
+            if getgenv().esp_loaded == false and Value == true then
+                getgenv().esp_loaded = true
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/connorobrien11/libary/main/fn5596723233475473587hWDw8q434923482989y39fd", true))()
+            end
+            getgenv().boxESP = Value
+        end
+    }
+    toggle5:Slider{
+        Text = "Text Font: [value]/3",
+        Default = 1,
+        Min = 1,
+        Max = 3,
+        Float = 0.5,
+        Flag = "Slider 1",
+        Callback = function(Value)
+            getgenv().FontValue = Value
+        end
+    }
+
+    sections.section2:Separator("Ambient")
+
+
+    sections.section2:Toggle{
+        Name = "No Fog",
+        Flag = "Toggle 1",
+        Default = false,
+        Callback  = function(bool)
+            local oldfog = game:GetService("Lighting").FogEnd
+            getgenv().nofog = bool 
+            if bool then 
+                while wait() do
+                    game:GetService("Lighting").FogEnd = 10000
+                    if getgenv().nofog == false then 
+                        game:GetService("Lighting").FogEnd = oldfog
+                    end
+                end
+            end
+        end
+    }
+    sections.section2:Toggle{
+        Name = "No Blur",
+        Flag = "Toggle 1",
+        Default = false,
+        Callback  = function(bool)
+            local oldfog = game:GetService("Lighting").FogEnd
+            getgenv().noblur = bool 
+            if bool then 
+                while wait() do
+                    game:GetService("Lighting"):FindFirstChild("WorldBlur").Parent = game.InsertService
+                    if getgenv().noblur == false then 
+                        game:GetService("InsertService"):FindFirstChild("WorldBlur").Parent = game.Lighting
+                    end
+                end
+            end
+        end
+    }
+    sections.section2:Toggle{
+        Name = "Full Bright",
+        Flag = "Toggle 1",
+        Default = false,
+        Callback  = function(bool)
+            local oldambient = game:GetService("Lighting").Ambient
+            getgenv().fullbright = bool 
+            if bool then 
+                while wait() do
+                    game:GetService("Lighting").Ambient = Color3.fromRGB(255,255,255)
+                    if getgenv().fullbright == false then 
+                        game:GetService("Lighting").Ambient = oldambient
+                    end
+                end
+            end
+        end
+    }
+end
+visuals()
+
+function teleports()
+    sections.section3:Dropdown{
+        Default = "None",
+        Content = {
+            "Sorithya Town",
+            "The Expanse",
+            "Training Grounds",
+            "Passageway",
+            "Windy Plains",
+            "Durana Town"
+        },
+        Flag = "Locations",
+        Callback = function(option)
+            if option == "Sorithya Town" then 
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(132, 56, -319)
+            end
+            if option == "The Expanse" then 
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-308, 59, -1268)
+            end
+            if option == "Training Grounds" then 
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(405, -219, 829)
+            end
+            if option == "Passageway" then 
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(696, 52, -321)
+            end
+            if option == "Windy Plains" then 
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-689, -219, 507)
+            end
+            if option == "Durana Town" then 
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(2036, -126, 915)
+            end
+        end
+    }
+end
+
+teleports()
+
+function configuration() 
+    local configs = main:Tab("Configuration")
+
+
+    local configsection = configs:Section{Name = "Configs", Side = "Left"}
+
+    local configlist = configsection:Dropdown{
+        Name = "Config Creation",
+        Content = library:GetConfigs(), -- GetConfigs(true) if you want universal configs
+        Flag = "Config Dropdown"
+    }
+
+    library:ConfigIgnore("Config Dropdown")
+
+    local loadconfig = configsection:Button{
+        Name = "Load Config",
+        Callback = function()
+            library:LoadConfig(library.flags["Config Dropdown"]) -- LoadConfig(library.flags["Config Dropdown"], true)  if you want universal configs
+        end
+    }
+
+    local delconfig = configsection:Button{
+        Name = "Delete Config",
+        Callback = function()
+            library:DeleteConfig(library.flags["Config Dropdown"]) -- DeleteConfig(library.flags["Config Dropdown"], true)  if you want universal configs
+            configlist:Refresh(library:GetConfigs())
+        end
+    }
+
+
+    local configbox = configsection:Box{
+        Name = "Config Name",
+        Placeholder = "Config Name",
+        Flag = "Config Name"
+    }
+
+    library:ConfigIgnore("Config Name")
+
+    local save = configsection:Button{
+        Name = "Save Config",
+        Callback = function()
+            library:SaveConfig(library.flags["Config Dropdown"] or library.flags["Config Name"]) -- SaveConfig(library.flags["Config Name"], true) if you want universal configs
+            configlist:Refresh(library:GetConfigs())
+        end
+    }
+
+    local keybindsection = configs:Section{Name = "UI Toggle", Side = "Left"}
+
+    keybindsection:Keybind{
+        Name = "Menu Key",
+        Flag = "UI Toggle",
+        Default = Enum.KeyCode.RightShift,
+        Blacklist = {Enum.UserInputType.MouseButton1, Enum.UserInputType.MouseButton2, Enum.UserInputType.MouseButton3},
+        Callback = function(_, fromsetting)
+            if not fromsetting then
+                library:Close()
+            end
+        end
+    }
+end
+
+configuration()
+
+
+
+
+--library:Close()
+--library:Unload()
