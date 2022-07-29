@@ -72,8 +72,8 @@ sections.section:Toggle{
                 local args = {...}
                 local method = getnamecallmethod()
                 
-                if method == "FireServer" and self.Name == "DataEvent" and args[1] == "TakeDamage" and getgenv().nofall == true then
-                    return
+                if method == "FireServer" and args[1] == "TakeDamage" and getgenv().nofall == true then
+                    return wait(9e9)
                 end
                 return oldnc(self,...)
             end)
@@ -91,8 +91,8 @@ sections.section:Toggle{
                 local args = {...}
                 local method = getnamecallmethod()
                 
-                if method == "FireServer" and self.Name == "DataEvent" and args[1] == "InflictFire" and getgenv().nofiredamage == true then
-                    return
+                if method == "FireServer" and args[1] == "InflictFire" and getgenv().nofiredamage == true then
+                    return wait(9e9)
                 end
                 return oldnc3(self,...)
             end)
